@@ -27,7 +27,7 @@ class Card {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 5; j++) {
                 int valorDado = 0;
-                while (!aux.add(valorDado) || valorDado== 0) {
+                while (!aux.add(valorDado) || valorDado == 0) {
                     Random r = new Random();
                     valorDado = r.nextInt(91);
                 }
@@ -36,17 +36,29 @@ class Card {
         }
     }
 
-
-    public boolean hasLine(){
-
+    public boolean hasLine() {
+        for (int i = 0; i < 3; i++) {
+            if (card[i].isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public boolean hasBingo(){
-
+    public boolean hasBingo() {
+        boolean bingo = true;
+        int aux = 0;
+        while (bingo && aux < 3) {
+            bingo = card[aux].isEmpty();
+            aux++;
+        }
+        return bingo;
     }
 
-    public void removeNumber(int number){
-
+    public void removeNumber(int number) {
+        for (int i = 0; i < 3; i++) {
+            card[i].remove(number);
+        }
     }
 
 }
