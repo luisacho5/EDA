@@ -9,7 +9,7 @@ import utils.NumberGetter;
 
 /**
  *
- * @author jose.velez
+ * @author Luis.Sanchez
  */
 class Player {
 

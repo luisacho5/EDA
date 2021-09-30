@@ -7,7 +7,7 @@ package bingo;
 
 /**
  *
- * @author jose.velez
+ * @author Luis.Sanchez
  */
 public class Bingo {
 
