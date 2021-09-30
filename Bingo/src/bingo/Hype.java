@@ -5,21 +5,34 @@
  */
 package bingo;
 
+import java.util.HashSet;
+import java.util.Random;
+
 /**
  *
  * @author Luis.Sanchez
  */
 class Hype {
 
+    private HashSet<Integer> bombo;
+    private final int tope=90;
+
     public Hype() {
+        this.bombo= new HashSet<>();
+        bombo.add(0);//numeros del 1 al 90 metemos 0 para evitar que salga
     }
 
     boolean hasNumbers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            return bombo.size()-1<tope;
     }
 
     int getNumber() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int valorDado=0;//nunca va a entrar con el 0
+        while (!bombo.add(valorDado) ) {
+            Random r = new Random();
+            valorDado = r.nextInt(91);
+        }
+        return valorDado;
     }
     
 }
