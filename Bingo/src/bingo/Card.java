@@ -24,12 +24,10 @@ class Card {
             card[i] = new HashSet<>();
         }
 
-        aux.add(0);
-
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 5; j++) {
                 int valorDado = 0;
-                while (!aux.add(valorDado)) {
+                while (!aux.add(valorDado) || valorDado== 0) {
                     Random r = new Random();
                     valorDado = r.nextInt(91);
                 }

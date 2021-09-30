@@ -23,11 +23,15 @@ class Game {
 
     void play() {
         boolean lineDetected = false;
-        while (hype.hasNumbers()) {
+        boolean bingoDetected = true;
+        while (hype.hasNumbers() && !bingoDetected) {
             int number = hype.getNumber();
+
             for (int i = 0; i < players.length; i++) {
                 players[i].removeNumber(number);
+
                 if (!lineDetected) {
+
                     if (players[i].hasLine()) {
                         System.out.println("Line detected");
                         lineDetected = true;
@@ -35,12 +39,13 @@ class Game {
                 }
                 if (players[i].hasBingo()) {
                     System.out.println("Bingo detected");
+                    bingoDetected = true;
                     break;
                 }
 
             }
         }
-        
+
     }
 
     private void createPlayers() {
