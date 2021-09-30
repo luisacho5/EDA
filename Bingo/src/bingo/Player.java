@@ -25,15 +25,25 @@ class Player {
     }
 
     void removeNumber(int number) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for(Card carton:cards){
+            carton.removeNumber(number);
+        }
     }
 
     boolean hasLine() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean hasLine= false;
+        for(Card carton:cards){
+            hasLine= carton.hasLine() || hasLine;
+        }
+        return hasLine;
     }
 
     boolean hasBingo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean hasBingo= false;
+        for(Card carton:cards){
+            hasBingo= carton.hasBingo() || hasBingo;
+        }
+        return hasBingo;
     }
     
 }
