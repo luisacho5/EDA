@@ -34,6 +34,18 @@ class Card {
                 card[i].add(valorDado);
             }
         }
+    }
+
+
+    public boolean hasLine(){
+
+    }
+
+    public boolean hasBingo(){
+
+    }
+
+    public void removeNumber(int number){
 
     }
 
