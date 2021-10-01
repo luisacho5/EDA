@@ -17,14 +17,15 @@ class Card {
     private Set[] card;
 
     public Card() {
-
+        Set<Integer> aux = new HashSet();
+        aux.add(0);
         for (int i = 0; i < 3; i++) {
             card[i]=new HashSet<>();
         }
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 5; j++) {
                 int valorDado = 0;
-                while (!aux.add(valorDado) || valorDado == 0) {
+                while (!aux.add(valorDado)) {
                     Random r = new Random();
                     valorDado = r.nextInt(91);
                 }

@@ -5,34 +5,31 @@
  */
 package bingo;
 
-import java.util.HashSet;
-import java.util.Random;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author Luis.Sanchez
  */
 class Hype {
-
-    private HashSet<Integer> bombo;
-    private final int tope=90;
+    
+    private final static int NUMBERS = 90;
+    private final List<Integer> bombo= new LinkedList();
 
     public Hype() {
-        this.bombo= new HashSet<>();
-        bombo.add(0);//numeros del 1 al 90 metemos 0 para evitar que salga
+        for(int i=1;i<=NUMBERS; i++)
+            bombo.add(i);
+        Collections.shuffle(bombo);
     }
 
     boolean hasNumbers() {
-            return bombo.size()-1<tope;
+        return !bombo.isEmpty();
     }
 
     int getNumber() {
-        int valorDado=0;//nunca va a entrar con el 0
-        while (!bombo.add(valorDado) ) {
-            Random r = new Random();
-            valorDado = r.nextInt(91);
-        }
-        return valorDado;
+        return bombo.remove(0);
     }
     
 }
