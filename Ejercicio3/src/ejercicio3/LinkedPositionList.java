@@ -6,6 +6,9 @@
 package ejercicio3;
 
 import java.util.Iterator;
+
+import javax.lang.model.util.ElementScanner14;
+
 import material.Position;
 
 /**
@@ -175,10 +178,37 @@ public class LinkedPositionList<E> implements MyListBetter<E>{
         return (search(value)!=null);
     }
 
+    private class Itr<Position> implements Iterator<Position> {
     
+        DLinkedNode<E> cursor;
+        public Itr(){
+            if (!isempty())
+                cursor = (DLinkedNode<E>)get();
+            else
+                cursor = null;
+        }
+        
+        public Itr(Position p){
+            cursor = (DLinkedNode<E>) p;
+        }
+        
+        @Override
+        public boolean hasNext() {
+            return cursor != null;
+        }
+
+        @Override
+        public Position next() {
+            if (!hasNext())
+                throw new RuntimeException("Fin de la lista");
+            Position currentPos = (Position) cursor;
+            cursor = cursor.getNext();
+            return currentPos;
+        }
+    }   
     @Override
-    public Iterator<Position<E>> iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Iterator iterator() {
+        return new  Itr(); 
     }
     
 }
