@@ -7,38 +7,35 @@ package bingo;
 
 import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 /**
  *
  * @author Luis.Sanchez
  */
 class Card {
-    private HashSet<HashSet<Integer>> card;
+    private Set[] card;
 
     public Card() {
 
-        this.card = new HashSet<>();
-        HashSet<Integer> aux = new HashSet<>();
-
         for (int i = 0; i < 3; i++) {
-            card.add(new HashSet<Integer>());
+            card[i]=new HashSet<>();
         }
-
-        for (HashSet<Integer> line: card) {
+        for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 5; j++) {
                 int valorDado = 0;
                 while (!aux.add(valorDado) || valorDado == 0) {
                     Random r = new Random();
                     valorDado = r.nextInt(91);
                 }
-                line.add(valorDado);
+                card[i].add(valorDado);
             }
         }
     }
 
     public boolean hasLine() {
-        for (HashSet<Integer> line: card) {
-            if (line.isEmpty()) {
+        for (int i = 0; i < 3; i++) {
+            if (card[i].isEmpty()) {
                 return true;
             }
         }
@@ -47,15 +44,15 @@ class Card {
 
     public boolean hasBingo() {
         boolean bingo = true;
-        for(HashSet<Integer> line: card){
-            bingo &= line.size()==0;
+        for(int i = 0; i < 3; i++){
+            bingo &= card[i].size()==0;
         }
         return bingo;
     }
 
     public void removeNumber(int number) {
-        for (HashSet<Integer> line: card) {
-            line.remove(number);
+        for (int i = 0; i < 3; i++) {
+            card[i].remove(number);
         }
     }
 
