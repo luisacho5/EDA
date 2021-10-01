@@ -14,7 +14,7 @@ import java.util.Set;
  * @author Luis.Sanchez
  */
 class Card {
-    private Set[] card;
+    private Set[] card,tachados;
 
     public Card() {
         Set<Integer> aux = new HashSet();
