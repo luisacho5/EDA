@@ -4,7 +4,7 @@ import material.Position;
 
 /**
  *
- * @author mayte
+ * @author Luis Sánchez
  * @param <E>
  */
 public class LinkedTree<E> implements NAryTree<E> {
