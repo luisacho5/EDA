@@ -90,22 +90,39 @@ public class LinkedTree<E> implements NAryTree<E> {
 
     @Override
     public void swapElements(Position<E> p1, Position<E> p2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       TreeNode<E> node1 = checkPosition(p1);
+       TreeNode<E> node2 = checkPosition(p2);
+       E element=node1.getElement();
+       node1.setElement(node2.getElement());
+       node2.setElement(element);
     }
 
     @Override
     public E replace(Position<E> p, E e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TreeNode<E> node = checkPosition(p);
+        E element=node.getElement();
+        node.setElement(e);
+        return element;
     }
 
     @Override
     public void remove(Position<E> p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TreeNode<E> node = checkPosition(p);
+        if(isRoot(p))
+            root=null;
+        else{
+            final TreeNode<E> parent = node.getParent();
+            parent.getChildren().remove(node);
+        }
     }
 
     @Override
     public NAryTree<E> subTree(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TreeNode<E> node = checkPosition(v);
+        this.remove(v);
+        LinkedTree<E> subtree = new LinkedTree<>();
+        subtree.root= node;
+        return subtree;
     }
 
     @Override
