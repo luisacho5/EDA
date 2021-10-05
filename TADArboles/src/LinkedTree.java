@@ -1,4 +1,9 @@
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
+import javax.management.RuntimeErrorException;
+
 import material.Position;
 
 /**
@@ -7,6 +12,12 @@ import material.Position;
  * @param <E>
  */
 public class LinkedTree<E> implements NAryTree<E> {
+
+    private TreeNode<E> checkPosition(Position<E> p) {
+        if(p!=null && p instanceof TreeNode)
+            return (TreeNode<E>)p;
+        else throw new RuntimeException("Nota valid node");
+    }
 
     private class TreeNode<T> implements Position<T>{
 
@@ -22,8 +33,6 @@ public class LinkedTree<E> implements NAryTree<E> {
             this.parent = parent;
             this.children=null;
         }
-
-
 
         @Override
         public T getElement() {
@@ -53,14 +62,25 @@ public class LinkedTree<E> implements NAryTree<E> {
         
     }
 
+    private TreeNode<E> root;
+
     @Override
     public Position<E> addRoot(E e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(!this.isEmpty())
+            throw new RuntimeException("Tree not empty");
+        this.root= new TreeNode<>(e,null);
+        return root;
     }
 
     @Override
     public Position<E> add(E element, Position<E> p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TreeNode<E> node =checkPosition(p);
+        if(node.getChildren()!=null)
+            node.setChildren(new ArrayList<TreeNode<E>>());
+        
+        TreeNode<E> children =new TreeNode<>(element,node);
+        node.getChildren().add(children);
+        return children;
     }
 
     @Override
