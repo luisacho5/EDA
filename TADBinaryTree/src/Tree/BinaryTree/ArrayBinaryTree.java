@@ -106,17 +106,17 @@ public class ArrayBinaryTree<E> implements BinaryTree<E> {
     }
 
     @Override
-    public void attachLeft(Position<String> h, BinaryTree<String> t1) {
+    public void attachLeft(Position<E> h, BinaryTree<E> t1) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void attachRight(Position<String> h, BinaryTree<String> t1) {
+    public void attachRight(Position<E> h, BinaryTree<E> t1) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public BinaryTree<String> subTree(Position<String> h) {
+    public BinaryTree<E> subTree(Position<E> h) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
