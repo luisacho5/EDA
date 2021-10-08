@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import javax.management.RuntimeErrorException;
 
@@ -74,18 +76,23 @@ public class LinkedTree<E> implements NAryTree<E> {
 
     @Override
     public Position<E> add(E element, Position<E> p) {
-        TreeNode<E> node =checkPosition(p);
-        if(node.getChildren()!=null)
-            node.setChildren(new ArrayList<TreeNode<E>>());
-        
-        TreeNode<E> children =new TreeNode<>(element,node);
-        node.getChildren().add(children);
-        return children;
+       TreeNode<E> node = checkPosition(p);
+        TreeNode<E> newNode = new TreeNode(element,null);
+        newNode.setParent(node);
+        node.getChildren().add(newNode);
+        return newNode;
     }
 
     @Override
     public Position<E> add(E element, Position<E> p, int n) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TreeNode<E> node = checkPosition(p);
+        List<TreeNode<E>> childrenList = node.getChildren();
+        TreeNode<E> newNode = new TreeNode(element,null);
+        if(childrenList.size() > n){
+            childrenList.add(n, newNode);
+            return newNode;
+        }
+        throw new RuntimeException("Index is not valid");
     }
 
     @Override
@@ -111,8 +118,10 @@ public class LinkedTree<E> implements NAryTree<E> {
         if(isRoot(p))
             root=null;
         else{
-            final TreeNode<E> parent = node.getParent();
-            parent.getChildren().remove(node);
+            if(node.getParent()!=null){;
+            node.getParent().getChildren().remove(node);
+            node.setParent(null);
+            }
         }
     }
 
@@ -120,6 +129,7 @@ public class LinkedTree<E> implements NAryTree<E> {
     public NAryTree<E> subTree(Position<E> v) {
         TreeNode<E> node = checkPosition(v);
         this.remove(v);
+        node.setParent(null);      
         LinkedTree<E> subtree = new LinkedTree<>();
         subtree.root= node;
         return subtree;
@@ -127,50 +137,103 @@ public class LinkedTree<E> implements NAryTree<E> {
 
     @Override
     public void attach(Position<E> p, NAryTree<E> t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TreeNode<E> newChild = checkPosition(t.root());
+        TreeNode<E> parent = checkPosition(p);
+        parent.getChildren().add(newChild);
+        newChild.setParent(parent);
     }
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return root==null;
     }
 
     @Override
     public Position<E> root() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(isEmpty()) throw new RuntimeException("Tree is empty");
+        return root;
     }
 
     @Override
     public Position<E> parent(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TreeNode<E> node = checkPosition(v);
+        if(isRoot(node)) throw new RuntimeException("Invalid operation");
+        return node.getParent();
     }
 
     @Override
     public Iterable<? extends Position<E>> children(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TreeNode<E> node = checkPosition(v);
+        return node.getChildren();
     }
 
     @Override
     public boolean isInternal(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return !isLeaf(v);
     }
 
     @Override
     public boolean isLeaf(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TreeNode<E> node = checkPosition(v);
+        return node.getChildren().isEmpty();
     }
 
     @Override
     public boolean isRoot(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TreeNode<E> node = checkPosition(v);
+        return root.equals(node);
     }
 
+    
+    private class LinkedTreeIterator<T> implements Iterator<Position<T>>{
+        private Queue<Position<T>> it = new LinkedList<>();
+        private LinkedTree<T> tree;
+        
+        public LinkedTreeIterator(LinkedTree<T> tree){
+            this(tree, tree.root());
+        }
+        
+        public LinkedTreeIterator(LinkedTree<T> tree, Position<T> pos){
+            if(tree.isEmpty()) throw new RuntimeException("Tree is empty");
+            if(pos == null) throw new RuntimeException("Position is not valid");
+            this.tree = tree;
+            it.add(tree.checkPosition(pos));
+        }
+        
+        @Override
+        public boolean hasNext() {
+            return !it.isEmpty();
+        }
+
+        @Override
+        public Position<T> next() {
+            Position<T> element = it.poll();
+            Iterable <? extends Position<T>> children = tree.children(element);
+            for(Position<T> p: children){
+                it.add(p);
+            }
+            return element;
+        }
+    } 
+     
     @Override
     public Iterator<Position<E>> iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new LinkedTreeIterator(this);
     }
  
     public int size(){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates. 
+        if (isEmpty())
+            return 0;
+        return countDescendents(root);              
+    }
+    
+    private int countDescendents(TreeNode<E> node){
+        int numDescendents = 0;
+        LinkedTreeIterator<E> it = new LinkedTreeIterator(this,node);
+        while(it.hasNext()){
+            it.next();
+            numDescendents++;
+        }
+        return numDescendents;
     }
 }
