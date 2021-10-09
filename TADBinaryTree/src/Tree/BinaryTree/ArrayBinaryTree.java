@@ -161,22 +161,41 @@ public class ArrayBinaryTree<E> implements BinaryTree<E> {
 
     @Override
     public void swap(Position<E> p1, Position<E> p2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BTPos<E> pos1 = checkPosition(p1);
+        BTPos<E> pos2 = checkPosition(p2);
+        E aux = pos1.getElement();
+        pos1.setElement(pos2.getElement());
+        pos2.setElement(aux);
     }
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return root() == null;    
     }
 
     @Override
     public Position<E> parent(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BTPos<E> pos = checkPosition(v);
+        if(isRoot(v)) throw new RuntimeException("Invalid Operation. Root has no parent");
+        BTPos<E> parent = null;
+        for(BTPos<E> aux : tree){
+            int rankL = calculateLeft(aux);
+            int rankR = calculateRight(aux);
+            if(rankL == pos.getPos() || rankR == pos.getPos()){
+                parent = aux;
+                break;
+            }
+        }
+        return parent;    
     }
 
     @Override
     public Iterable<? extends Position<E>> children(Position<E> v) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BTPos<E> pos = checkPosition(v);
+        List<Position<E>> children = new LinkedList<>();
+        if(hasLeft(pos)) children.add(left(pos));
+        if(hasRight(pos)) children.add(right(pos));
+        return children;
     }
 
     @Override
@@ -186,12 +205,28 @@ public class ArrayBinaryTree<E> implements BinaryTree<E> {
 
     @Override
     public void attachLeft(Position<E> h, BinaryTree<E> t1) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        f(t1 == null || !(t1 instanceof ArrayBinaryTree)){
+            throw new RuntimeException("Tree is not valid");
+        }
+        BTPos<E> pos = checkPosition(h);
+        BTPos<E> newChild = checkPosition(t1.root());
+        if(t1 == null) throw new RuntimeException("Invalid Operation. Tree is not valid.");
+        if(hasLeft(pos)) throw new RuntimeException("Invalid Operation. There is a left child");
+        int leftChildPos = calculateLeft(pos);
+        tree[leftChildPos] = newChild;    
     }
 
     @Override
     public void attachRight(Position<E> h, BinaryTree<E> t1) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        f(t1 == null || !(t1 instanceof ArrayBinaryTree)){
+            throw new RuntimeException("Tree is not valid");
+        }
+        BTPos<E> pos = checkPosition(h);
+        BTPos<E> newChild = checkPosition(t1.root());
+        if(t1 == null) throw new RuntimeException("Invalid Operation. Tree is not valid.");
+        if(hasRight(pos)) throw new RuntimeException("Invalid Operation. There is a left child");
+        int rightChildPos = calculateRight(pos);
+        tree[rightChildPos] = newChild;    
     }
 
     @Override
