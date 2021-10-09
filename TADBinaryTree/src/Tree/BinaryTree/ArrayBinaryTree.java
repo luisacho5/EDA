@@ -3,6 +3,8 @@ package Tree.BinaryTree;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import material.Position;
 
 /**
@@ -24,6 +26,16 @@ public class ArrayBinaryTree<E> implements BinaryTree<E> {
     
     private int calculateRight(BTPos<E> pos){
          return 2 * pos.getPos()+2;
+    }
+
+    private BTPos<E>[] resizeTree(int newsize) {
+        BTPos<E>[] newTree = new BTPos[newsize];
+        for(int i = 0; i < newsize; i++){
+            if(i < maxsize) newTree[i] = tree[i];
+            else newTree[i] = null;
+        }
+        maxsize = newsize;
+        return newTree;
     }
     
     private class BTPos<E> implements Position<E>{
@@ -127,11 +139,17 @@ public class ArrayBinaryTree<E> implements BinaryTree<E> {
 
     @Override
     public Position<E> sibling(Position<E> p) {
-        BTPos<E> pos= checkPosition(p);
+        BTPos<E> pos = checkPosition(p);
         if(isRoot(pos)){
             throw new RuntimeException("Invalid operation. There is no sibling");
         }
-        return null;
+        BTPos<E> par = (BTPos<E>)parent(p);
+        if(isLeft(par,pos)){
+            return left(par);
+        }
+        else{
+            return right(par);
+        }
         
     }
 
@@ -146,17 +164,46 @@ public class ArrayBinaryTree<E> implements BinaryTree<E> {
 
     @Override
     public Position<E> insertLeft(Position<E> p, E e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BTPos<E> pos = checkPosition(p);
+        if(hasLeft(p)) throw new RuntimeException("Invalid Operation. There is a left child");
+        int rankChild = calculateLeft(pos);
+        if(rankChild >= maxsize) resizeTree(rankChild+10);
+        BTPos<E> newChild = new BTPos(e,rankChild);
+        tree[rankChild] = newChild;
+        return newChild;
     }
 
     @Override
     public Position<E> insertRight(Position<E> p, E e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BTPos<E> pos = checkPosition(p);
+        if(hasRight(p)) throw new RuntimeException("Invalid Operation. There is a left child");
+        int rankChild = calculateRight(pos);
+        if(rankChild >= maxsize) resizeTree(rankChild+10);
+        BTPos<E> newChild = new BTPos(e,rankChild);
+        tree[rankChild] = newChild;
+        return newChild;
     }
 
     @Override
     public E remove(Position<E> p) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BTPos<E> pos = checkPosition(p);
+        if(hasLeft(pos) && hasRight(pos)){
+            throw new RuntimeException("Invalid Operation. Cannot remove node, there are 2 childs");
+        }
+        E oldValue = pos.getElement();
+        if(isRoot(pos)){
+            for(int i=0; i<maxsize;i++){
+                tree[i]=null;
+            }
+        }
+        else{
+            for(Position<E> c: children(p)){
+                BTPos<E> child = (BTPos<E>)c;
+                remove(child);
+            }
+            tree[pos.getPos()] = null;
+        }
+        return oldValue;
     }
 
     @Override
@@ -205,7 +252,7 @@ public class ArrayBinaryTree<E> implements BinaryTree<E> {
 
     @Override
     public void attachLeft(Position<E> h, BinaryTree<E> t1) {
-        f(t1 == null || !(t1 instanceof ArrayBinaryTree)){
+        if(t1 == null || !(t1 instanceof ArrayBinaryTree)){
             throw new RuntimeException("Tree is not valid");
         }
         BTPos<E> pos = checkPosition(h);
@@ -218,7 +265,7 @@ public class ArrayBinaryTree<E> implements BinaryTree<E> {
 
     @Override
     public void attachRight(Position<E> h, BinaryTree<E> t1) {
-        f(t1 == null || !(t1 instanceof ArrayBinaryTree)){
+        if(t1 == null || !(t1 instanceof ArrayBinaryTree)){
             throw new RuntimeException("Tree is not valid");
         }
         BTPos<E> pos = checkPosition(h);
@@ -231,7 +278,27 @@ public class ArrayBinaryTree<E> implements BinaryTree<E> {
 
     @Override
     public BinaryTree<E> subTree(Position<E> h) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BTPos<E> pos = checkPosition(h);
+        if(isRoot(pos)) return this;
+        ArrayBinaryTree<E> subTree = new ArrayBinaryTree<>(20);
+        subTree.tree[0] = pos;
+        subTree.tree[0].setPos(0);
+        tree[pos.getPos()] = null;
+        return subTree;
+    }
+    
+    private boolean isLeft(Position<E> parent, Position<E> p){
+        BTPos<E> parentPos = checkPosition(parent);
+        BTPos<E> child = checkPosition(p);
+        int rankChild = child.getPos();
+        return (rankChild == calculateLeft(parentPos));
+    }
+    
+    private boolean isRight(Position<E> parent, Position<E> p){
+        BTPos<E> parentPos = checkPosition(parent);
+        BTPos<E> child = checkPosition(p);
+        int rankChild = child.getPos();
+        return (rankChild == calculateRight(parentPos));
     }
     
 }
