@@ -1,8 +1,12 @@
 
 package material.tree;
 
+import java.util.Collections;
 import material.Position;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
 
 /**
  *
@@ -13,25 +17,41 @@ public class PreOrderTreeIterator<T> implements Iterator<Position<T>> {
 
     
 
-    public PreOrderTreeIterator(Tree<T> tree) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private Tree<T> tree;
+    private Stack<Position<T>> stack= new Stack<>();
+    
+    public PreOrderTreeIterator(Tree<T> t) {
+        tree=t;
+        if(!tree.isEmpty())
+         stack.push(tree.root());
+        
     }
-
-    public PreOrderTreeIterator(Tree<T> tree, Position<T> root) {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public PreOrderTreeIterator(Tree<T> t, Position<T> p) {
+        tree=t;
+        stack.push(p);
     }
+    
+    
 
     @Override
     public boolean hasNext() {
-       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return !stack.isEmpty();
     }
 
-    /**
-     * This method visits the nodes of a tree by following a pre-order
-     */
     @Override
     public Position<T> next() {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Position<T> node = stack.pop();      
+        List<Position<T>> aux = new LinkedList<>();
+        for (Position<T> child : tree.children(node)) {
+            aux.add(child);
+        }
+        Collections.reverse(aux);
+        // añadir
+        for (Position<T> child : aux) {
+            stack.push(child);
+        }
+         return node; 
     }
 
 }

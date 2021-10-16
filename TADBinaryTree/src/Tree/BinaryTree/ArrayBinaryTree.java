@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import material.Position;
 
 /**
@@ -12,6 +13,43 @@ import material.Position;
  * @author mayte
  */
 public class ArrayBinaryTree<E> implements BinaryTree<E> {
+
+    private class ArrayBinaryTreeIterator<T> implements Iterator<Position<T>>{
+        private Queue<Position<T>> elements;
+        private ArrayBinaryTree<T> tree;
+        
+        public ArrayBinaryTreeIterator(ArrayBinaryTree<T> tree){
+            this(tree, null);
+        }
+        
+        public ArrayBinaryTreeIterator(ArrayBinaryTree<T> tree, BTPos<T> pos){
+            this.tree = tree;
+            elements = new LinkedList<>();
+            if(pos == null){
+                elements.add(tree.root());
+            }else{
+                elements.add(pos);
+            }
+        }
+        
+        @Override
+        public boolean hasNext() {
+            return !elements.isEmpty();
+        }
+
+        @Override
+        public Position<T> next() {
+            BTPos<T> current = (BTPos<T>) elements.poll();
+            if(tree.hasRight(current)){
+                elements.add(tree.right(current));
+            }
+            elements.add(current);
+            if(tree.hasLeft(current)){
+               elements.add(tree.left(current));
+            }
+            return elements.remove();
+        }
+    }
 
     private BTPos<E> checkPosition(Position<E> p){
         if(p != null && p instanceof BTPos){
@@ -247,7 +285,7 @@ public class ArrayBinaryTree<E> implements BinaryTree<E> {
 
     @Override
     public Iterator<Position<E>> iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ArrayBinaryTreeIterator(this);    
     }
 
     @Override

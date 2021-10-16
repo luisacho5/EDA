@@ -1,7 +1,10 @@
 package material.tree;
 
+import java.util.Deque;
 import material.Position;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Stack;
 
 /**
  *
@@ -10,18 +13,36 @@ import java.util.Iterator;
  */
 public class PosOrderTreeIterator<T> implements Iterator<Position<T>> {
 
+    private Stack<Position<T>> stack= new Stack<>();
+    private Tree<T> tree;
        
-    public PosOrderTreeIterator(Tree<T> tree) {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
 
-    public PosOrderTreeIterator(Tree<T> tree, Position<T> root) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public PosOrderTreeIterator(Tree<T> t, Position<T> root) {
+        tree=t;
+        Deque<Position<T>> aux = new LinkedList();
+        
+        if(root==null){
+            aux.add(root);
+        }else{
+            aux.add(tree.root());
+        }
+        
+        while(!aux.isEmpty()){
+            Position<T> current=aux.pop();
+            for(Position<T> child: tree.children(current))
+                aux.push(child);
+            stack.push(current);
+        }
+    }
+    
+    public PosOrderTreeIterator(Tree<T> t) {
+        this(t,t.root());
     }
 
     @Override
     public boolean hasNext() {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return !stack.isEmpty();
     }
 
     /**
@@ -29,8 +50,7 @@ public class PosOrderTreeIterator<T> implements Iterator<Position<T>> {
      */
     @Override
     public Position<T> next() {
-       throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-
+       return stack.pop();
     }
 
 }
