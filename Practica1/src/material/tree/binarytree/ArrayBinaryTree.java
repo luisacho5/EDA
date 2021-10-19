@@ -286,41 +286,42 @@ public class ArrayBinaryTree<E> implements BinaryTree<E> {
 
     @Override
     public BinaryTree<E> subTree(Position<E> h) {
-        BTPos<E> pos = checkPosition(h);
-        if (isRoot(pos)) {
-            return this;
-        }
-        ArrayBinaryTree<E> subTree = new ArrayBinaryTree<>();
+        throw new UnsupportedOperationException("Not supported yet.");
+        //BTPos<E> pos = checkPosition(h);
+       // if (isRoot(pos)) {
+         //   return this;
+        //}
+        //ArrayBinaryTree<E> subTree = new ArrayBinaryTree<>();
         
-        int current = 0;
+        //int current = 0;
         
-        BreadthFirstTreeIterator<E> it = new BreadthFirstTreeIterator(this, pos);
-        while(it.hasNext()){
-            BTPos<E> aux = (BTPos<E>)it.next();
-            subTree.tree[current] = aux;
-            current++;
-            tree[aux.getRank()] = null;
-        }
-        tree[pos.getRank()] = null;
+        //BreadthFirstTreeIterator<E> it = new BreadthFirstTreeIterator(this, pos);
+        //while(it.hasNext()){
+          //  BTPos<E> aux = (BTPos<E>)it.next();
+          //  subTree.tree[current] = aux;
+          //  current++;
+          //  tree[aux.getRank()] = null;
+        //}
+        //tree[pos.getRank()] = null;
         
-        it = new BreadthFirstTreeIterator(subTree);
-        while(it.hasNext()){
-            BTPos<E> aux = (BTPos<E>)it.next();
-            if(subTree.isRoot(aux)){
-                subTree.tree[0].setRank(0);
-            }
-            else{
-                BTPos<E> par = (BTPos<E>)subTree.parent(aux);
-                int newRank;
-                if(subTree.left(par).equals(aux))
-                    newRank = calculateRankLeftChild(par);
-                else
-                    newRank = calculateRankRightChild(par);
-                aux.setRank(newRank);
-            }
-        }
+        //it = new BreadthFirstTreeIterator(subTree);
+        //while(it.hasNext()){
+           // BTPos<E> aux = (BTPos<E>)it.next();
+           // if(subTree.isRoot(aux)){
+           //     subTree.tree[0].setRank(0);
+           // }
+           // else{
+           //     BTPos<E> par = (BTPos<E>)subTree.parent(aux);
+           //     int newRank;
+           //     if(subTree.left(par).equals(aux))
+           //         newRank = calculateRankLeftChild(par);
+           //     else
+           //         newRank = calculateRankRightChild(par);
+           //     aux.setRank(newRank);
+         //   }
+        //}
         
-        return subTree;
+        //return subTree;
     }
 
     private int calculateRankLeftChild(BTPos<E> par) {
