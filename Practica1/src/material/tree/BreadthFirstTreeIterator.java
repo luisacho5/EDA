@@ -1,7 +1,11 @@
 
 package material.tree;
 
+import java.util.Collections;
+import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import material.Position;
 
 /**
@@ -11,17 +15,22 @@ import material.Position;
  */
 public class BreadthFirstTreeIterator<T> implements Iterator<Position<T>> {
 
+    private Tree<T> tree;
+    private List<Position<T>> list= new LinkedList<>();
         
     public BreadthFirstTreeIterator(Tree<T> tree, Position<T> root) {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        this.tree=tree;
+        Deque<Position<T>> aux = new LinkedList<>();
+        list.add(root);
     }
     public BreadthFirstTreeIterator(Tree<T> tree) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       this(tree,tree.root());
     }
     
     @Override
     public boolean hasNext() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ! list.isEmpty();
     }
 
     /**
@@ -29,7 +38,11 @@ public class BreadthFirstTreeIterator<T> implements Iterator<Position<T>> {
      */
     @Override
     public Position<T> next() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Position<T> current=list.remove(0);
+        for(Position<T> children:tree.children(current)){
+            list.add(children);
+        }
+        return current;
     }
 
    
