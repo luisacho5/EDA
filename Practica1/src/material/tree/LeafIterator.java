@@ -1,7 +1,13 @@
 
 package material.tree;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
 import material.Position;
 
 /**
@@ -11,19 +17,38 @@ import material.Position;
  */
 public class LeafIterator<T> implements Iterator<Position<T>>  {
     
-    
+    private Tree<T> tree;
+    private Deque<Position<T>> queue= new LinkedList<>();
 
     public LeafIterator(Tree<T> tree, Position<T> root){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.tree=tree;
+        Deque<Position<T>> aux = new LinkedList<>();
+        aux.push(root);
+        
+        while(!aux.isEmpty()){
+        Position<T> nodoaux = aux.pop();
+        List<Position<T>> childrenList = new LinkedList<>();
+            for (Position<T> child: tree.children(nodoaux)) {
+                childrenList.add(child);
+            }
+            Collections.reverse(childrenList);
+            for(Position<T> child: childrenList){
+                aux.push(child);
+            }
+            
+            if(tree.isLeaf(nodoaux)){
+            queue.add(nodoaux);
+            }
+        }
     }
     
     public LeafIterator(Tree<T> tree){
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this(tree,tree.root());
     }
     
     @Override
     public boolean hasNext() {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       return !queue.isEmpty();
     }
 
     /**
@@ -31,7 +56,7 @@ public class LeafIterator<T> implements Iterator<Position<T>>  {
      */
     @Override
     public Position<T> next() {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return queue.pollFirst();
     }
 
     
