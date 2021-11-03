@@ -7,13 +7,19 @@ package practica1;
  */
 public class FendTree {
     
+    
+    final static int MAX = 1000;     
+    static int tree[] = new int[MAX];
     /**
      * Builds a Fendwick Tree with the array that receives
      * 
      * @param array
      */
     public FendTree(int [] array){
-      throw new  UnsupportedOperationException("Not implemented.");
+        for(int i=1; i<=array.length; i++)
+            tree[i] = 0;
+        for(int i = 0; i < array.length; i++)
+            upDate(i, array[i]);
     }
     
     /**
@@ -23,7 +29,14 @@ public class FendTree {
      * @return 
      */
     public int getSum(int index){
-      throw new  UnsupportedOperationException("Not implemented.");
+      int sum = 0; 
+        index = index + 1;
+        while(index>0)
+        {
+            sum += tree[index];
+            index -= index & (-index); //padre= original- (original and (complemento2 original)) subir en el arbol
+        }
+        return sum;
     }
  
     /**
@@ -33,7 +46,13 @@ public class FendTree {
      * @param val
      */
     public void upDate (int index, int val){
-       throw new  UnsupportedOperationException("Not implemented.");  
+        if(index==-1) index=tree.length;
+        index = index + 1;
+        while(index <= tree.length)
+        {
+            tree[index] += val;
+            index += index & (-index);//siguiente= original+ (original and (complemento2 original)) para bajar en el arbol
+        }
     }
     
 }
