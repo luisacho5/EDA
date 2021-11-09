@@ -39,7 +39,6 @@ public class LinkedBinarySearchTree<E> implements BinarySearchTree<E> {
     public Position<E> find(E value) {
         checkComparable(value);
         Position<E> aux=tree.root();
-        int i=0;
         while(aux!=null){
             int cmp = comparator.compare(value, aux.getElement());
             if(cmp==0)
@@ -54,7 +53,7 @@ public class LinkedBinarySearchTree<E> implements BinarySearchTree<E> {
                 aux=null;
             }
         }
-        return null;
+        return aux;
     }
 
     @Override
@@ -62,7 +61,6 @@ public class LinkedBinarySearchTree<E> implements BinarySearchTree<E> {
         List<Position<E>> lista= new ArrayList<>();
         checkComparable(value);
         Position<E> aux=tree.root();
-        int i=0;
         while(aux!=null){
             int cmp = comparator.compare(value, aux.getElement());
             if(cmp==0){

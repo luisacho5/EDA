@@ -4,7 +4,7 @@ import material.Position;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
-import javafx.util.Pair;
+import material.Pair;
 
 /**
  *
@@ -40,8 +40,8 @@ public class PosOrderTreeIterator<T> implements Iterator<Position<T>> {
             throw new RuntimeException("No next element");
         
         Pair<Position<T>,Iterator> element = nodeStack.getLast();
-        Position<T> node = element.getKey();
-        Iterator iterator = element.getValue();
+        Position<T> node = element.getFirst();
+        Iterator iterator = element.getSecond();
         
         while (tree.isInternal(node) && iterator.hasNext()) {
             node = (Position<T>) iterator.next();
