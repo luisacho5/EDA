@@ -19,7 +19,7 @@ public class HashTableMapQP<K, V> extends AbstractHashTableMap<K, V> {
 
     @Override
     protected int offset(int hashKey, int i) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return 3*i+5*i*i;
     }
 
 }

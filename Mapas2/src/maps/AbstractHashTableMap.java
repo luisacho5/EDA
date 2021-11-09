@@ -189,7 +189,7 @@ abstract public class AbstractHashTableMap<K, V> implements Map<K, V> {
     protected int prime, capacity; // prime factor and capacity of bucket array
     protected long scale, shift; // the shift and scaling factors
     protected HashEntry<K, V>[] bucket;// bucket array
-    protected final Entry<K, V> AVAILABLE = new HashEntry<>(null, null);
+    protected final HashEntry<K, V> AVAILABLE = new HashEntry<>(null, null);
 
     /**
      * Creates a hash table with prime factor 109345121 and capacity 1000.
@@ -316,7 +316,14 @@ abstract public class AbstractHashTableMap<K, V> implements Map<K, V> {
      */
     @Override
     public V remove(K key) throws IllegalStateException {
-        throw new UnsupportedOperationException("Not yet implemented");
+        HashEntryIndex indice=damePosicion(key);
+        if(indice.found){
+            V val=bucket[indice.index].getValue();
+            bucket[indice.index]=this.AVAILABLE;
+            n--;
+            return val;
+        }
+        return null;
     }
 
     @Override
@@ -386,18 +393,25 @@ abstract public class AbstractHashTableMap<K, V> implements Map<K, V> {
      * @return
      */
     protected int hashValue(K key) {
-        return (int) (Math.abs(key.hashCode() * scale + shift) % prime);
+        return (int) ((Math.abs(key.hashCode() * scale + shift) % prime)%capacity);
     }
 
     /**
      * Doubles the size of the hash table and rehashes all the entries.
      */
     protected void rehash() {
-        
-    }
-
-    protected void rehash(int newcap) {
-        
+        this.capacity *= 2;
+        HashEntry<K, V> [] oldB = this.bucket;
+        this.bucket = (HashEntry<K, V>[]) new HashEntry[this.capacity];
+        Random rand = new Random();
+        this.scale = rand.nextInt(this.prime - 1) + 1;
+        this.shift = rand.nextInt(this.prime);
+        for (HashEntry<K, V> he : oldB) {
+            if (he != null && he != this.AVAILABLE) {
+                HashEntryIndex e = this.damePosicion(he.getKey());
+                this.bucket[e.index] = he;
+            }
+        }
     }
 
 }
