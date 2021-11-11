@@ -4,8 +4,10 @@ package material.tree;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 import material.Position;
 import material.tree.binarytree.BinaryTree;
 import material.tree.narytree.NAryTree;
@@ -25,31 +27,31 @@ public class MoreFunctionality<T> {
      * @return 
      */
     public List<T> leftView(NAryTree<T> tree){
-        
        List<T> listfinal= new ArrayList<>();
-       Deque<Position<T>> aux = new LinkedList<>();
-        aux.push(tree.root());
-        listfinal.add(tree.root().getElement());
-        while(!aux.isEmpty()){
-        Position<T> nodoaux = aux.pop();
-            List<Position<T>> childrenList = new LinkedList<>();
-            List<Position<T>> childrenList2 = new LinkedList<>();
-            for (Position<T> child: tree.children(nodoaux)) {
-                childrenList.add(child);
-                for (Position<T> child2: childrenList) {
-                    childrenList2.add(child2);
-                }
-                listfinal.add(childrenList2.get(0).getElement());
-            }
-            
-            Collections.reverse(childrenList);
-            for(Position<T> child: childrenList){
-                aux.push(child);
-            }
-            
-        }
-        return listfinal;
+       List<Integer> max= new ArrayList<>();
+       max.add(0);
+       leftaux(tree, listfinal, max, 1);
+       return listfinal;
     }
+    
+    private void leftaux(NAryTree<T> root, List<T> lista,List<Integer> max, int nivel){
+        if(root.isEmpty())return;
+        
+        if(max.get(0)<nivel)
+        {
+            lista.add(root.root().getElement());
+            max.set(0,nivel);
+        }
+        
+        Iterator<Position<T>> it =new BreadthFirstTreeIterator<>(root);
+        Position<T> pos=it.next();
+        while(it.hasNext()){
+            pos=it.next();
+            leftaux(root.subTree(pos), lista, max, nivel+1);
+        }
+    }
+
+    
    /**
      * This method recives a NArytree and returns a List with the elements of the 
      * tree that can be seen if the tree is viewed from the right side.
@@ -57,8 +59,32 @@ public class MoreFunctionality<T> {
      * @return 
      */
     public List<T> rightView(NAryTree<T> tree){
-        
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       List<T> listfinal= new ArrayList<>();
+       List<Integer> max= new ArrayList<>();
+       max.add(0);
+       rightaux(tree, listfinal, max, 1);
+       return listfinal;
     
+    }
+
+    private void rightaux(NAryTree<T> root, List<T> lista, List<Integer> max, int nivel) {
+       if(root.isEmpty())return;
+       
+       if(max.get(0)<nivel)
+        {
+            lista.add(root.root().getElement());
+            max.set(0,nivel);
+        }
+       
+       Stack<Position<T>> pila= new Stack();
+       pila.add(root.root());
+       Position<T> pos= pila.pop();
+       for(Position<T> node: root.children(pos)){
+           pila.add(node);
+       }
+       while(pila.size()!=0){
+           pos=pila.pop();
+           rightaux(root.subTree(pos), lista, max, nivel+1);
+       }
     }
 }
