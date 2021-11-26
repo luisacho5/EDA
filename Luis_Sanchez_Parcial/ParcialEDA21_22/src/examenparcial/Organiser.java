@@ -76,6 +76,7 @@ public class Organiser {
         if(!miMapa.get(s.getDni()).equals(l)){
             System.out.print("No está matriculado en estas asignaturas");
             miMapa.put(s.getDni(), l);
+            estudiantes.put(s.getDni(), s);
         }
         
     }
