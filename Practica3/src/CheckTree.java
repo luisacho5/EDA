@@ -1,4 +1,6 @@
 
+
+import material.Position;
 import material.tree.binarytree.BinaryTree;
 
 
@@ -16,9 +18,26 @@ public class CheckTree<E extends Comparable> {
      * @return      
     */
     public boolean isBinarySearchTree(BinaryTree<E> tree){
-        
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    
+       
+        if(!tree.isEmpty()){
+            Position<E> p=tree.root();
+            return comparaArbol(p,tree);
+        }
+        return true;
+    }
+    private boolean comparaArbol(Position<E> p, BinaryTree<E> tree) {
+        boolean izq=true;
+        boolean der=true;
+
+        if(tree.hasLeft(p)){
+            Position<E> left=tree.left(p);
+            izq=(p.getElement().compareTo(left.getElement())>0) && comparaArbol(left,tree);
+        }
+        if(tree.hasRight(p)){
+            Position<E> right=tree.right(p);
+            der=(p.getElement().compareTo(right.getElement())<=0) && comparaArbol(right,tree);
+        }
+        return izq && der;
     }
 
 }
