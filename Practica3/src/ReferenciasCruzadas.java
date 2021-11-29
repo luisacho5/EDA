@@ -1,7 +1,10 @@
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import java.util.TreeMap;
 
 
 
@@ -17,10 +20,27 @@ public class ReferenciasCruzadas {
     * @param fichero
     * @throws java.io.IOException
     */
+    private TreeMap<String,List<Integer>> almacen;
+
     public ReferenciasCruzadas (FileReader fichero) throws IOException{
         
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    
+        almacen= new TreeMap<>();
+        Scanner sc = new Scanner(fichero).useDelimiter("\\`|\\~|\\!|\\@|\\#|\\$|\\%|\\^|\\&|\\*|\\(|\\)|\\+|\\=|\\[|\\{|\\]|\\}|\\||\\\\|\\'|\\<|\\,|\\.|\\>|\\?|\\/|\\\"\"|\\;|\\:|\\s+");
+        int pos=1;
+        while(sc.hasNext()){
+            String palabra = sc.next();
+            if(!palabra.isEmpty()){
+            List<Integer> valor = almacen.get(palabra);
+            if(valor== null){
+                valor= new ArrayList<>();
+            }else{
+                almacen.remove(palabra);
+            }
+            valor.add(pos);
+            almacen.put(palabra, valor);
+            pos++;
+            }
+        }
     }
     
     /**
@@ -31,8 +51,7 @@ public class ReferenciasCruzadas {
     */
     public List<Integer> apariciones(String word){
         
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    
+        return almacen.get(word);    
     }
     
 }
