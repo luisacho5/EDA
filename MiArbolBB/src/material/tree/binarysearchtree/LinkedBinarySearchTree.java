@@ -204,28 +204,7 @@ public class LinkedBinarySearchTree<E> implements BinarySearchTree<E> {
         }
         return null; 
     }
-        public Position<E> root(){
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    public Position<E> parent(){
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    public Boolean hasLeft(){
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    public Boolean hashRight(){
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    public Boolean isRoot(Position<E> p){
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    public Position<E> left(){
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    public Position<E> right(){
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+       
     private Position<E> minimum(Position<E> pos) {
         Position<E> current = pos;
         while(current != null){
