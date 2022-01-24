@@ -60,7 +60,6 @@ public class SmartPalaceMap {
         Vertex<Room> room_2 = palacio.insertVertex(room2);
         List<Edge<Boolean>> path = bs.getPath(palacio, room_1, room_2);
         List<Room> rooms = new ArrayList<>();
-        Edge<Room> lastEdge = null;
         for (Edge<Boolean> edge : path) {
             List<Vertex<Room>> endVertices = palacio.endVertices(edge);
             for (Vertex<Room> r : endVertices) {

@@ -63,6 +63,7 @@ public class Organiser {
      */
     public void newStudent(Student s, List<String> l) {
         miMapa.put(s.getDni(),l); 
+        estudiantes.put(s.getDni(), s);
     }
 
     /**
